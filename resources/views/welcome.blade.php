@@ -306,6 +306,18 @@
                         </router-link>
                       </li>
                       <li class="nav-item">
+                        <router-link to="/today-expense" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Today Expense</p>
+                        </router-link>
+                      </li>
+                      <li class="nav-item">
+                        <router-link to="/monthly-expense" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Monthly Expense</p>
+                        </router-link>
+                      </li>
+                      <li class="nav-item">
                         <router-link to="/all-expense" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>All Expense</p>

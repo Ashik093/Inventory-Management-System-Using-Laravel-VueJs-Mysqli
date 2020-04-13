@@ -9,7 +9,7 @@
 					<div class="col-sm-6">
 						<ol class="breadcrumb float-sm-right">
 							<li class="breadcrumb-item"><router-link to="/dashboard">Home</router-link></li>
-							<li class="breadcrumb-item active">All Expense</li>
+							<li class="breadcrumb-item active">Monthly Expense</li>
 						</ol>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
@@ -20,7 +20,7 @@
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header bg-primary">
-						<h3 class="card-title">All Expense</h3>
+						<h3 class="card-title">Monthly Expense</h3>
 						<router-link to="/add-expense" class="btn btn-success btn-sm float-sm-right">Add Expense</router-link>
 				 	</div>
 					<!-- /.card-header -->
@@ -74,8 +74,8 @@
 			}
 		},
 		methods:{
-			allExpense(){
-				axios.get('/api/expense')
+			monthlyExpense(){
+				axios.get('/api/monthly-expense')
 					.then(({data})=>(this.expenses = data))
 					.catch()
 			},
@@ -125,7 +125,7 @@
 			
 		},
 		created(){
-			this.allExpense()
+			this.monthlyExpense()
 		}
 	}
 </script>

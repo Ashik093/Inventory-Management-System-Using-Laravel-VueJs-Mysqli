@@ -30,6 +30,9 @@ let editproduct = require('./components/product/edit.vue').default;
 //expense
 let addexpense = require('./components/expense/create.vue').default;
 let allexpense = require('./components/expense/index.vue').default;
+let editexpense = require('./components/expense/edit.vue').default;
+let dailyexpense = require('./components/expense/daily.vue').default;
+let monthlyexpense = require('./components/expense/monthly.vue').default;
 
 
 export const routes =[
@@ -63,4 +66,7 @@ export const routes =[
 	 //expense
 	 {path:'/add-expense',component:addexpense,name:'addexpense'},
 	 {path:'/all-expense',component:allexpense,name:'allexpense'},
+	 {path:'/edit-expense/:id',component:editexpense,name:'editexpense'},
+	 {path:'/today-expense',component:dailyexpense,name:'dailyexpense'},
+	 {path:'/monthly-expense',component:monthlyexpense,name:'monthlyexpense'},
 ]

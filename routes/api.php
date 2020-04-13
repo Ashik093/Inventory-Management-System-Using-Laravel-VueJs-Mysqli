@@ -22,3 +22,5 @@ Route::apiResource('/category','Api\CategoryController');
 Route::apiResource('/product','Api\ProductController');
 //expense
 Route::apiResource('/expense','Api\ExpenseController');
+Route::Get('/today-expense','Api\ExpenseController@dailyExpense');
+Route::Get('/monthly-expense','Api\ExpenseController@monthlyExpense');
