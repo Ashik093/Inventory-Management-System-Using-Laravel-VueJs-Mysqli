@@ -86,7 +86,7 @@
 							<small class="text-danger" v-if="errors.quantity">{{ errors.quantity[0] }}</small>
            					<div class="form-group">
            					    <label>Product Quantity</label>
-          			                <input type="text" class="form-control" placeholder="Enter Product Quantity" v-model="form.quantity">
+          			            <input type="text" class="form-control" placeholder="Enter Product Quantity" v-model="form.quantity">
            					</div>
 
            					<div class="form-group">

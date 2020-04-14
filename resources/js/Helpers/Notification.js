@@ -43,6 +43,15 @@ class Notification{
 			timeout:1000
 		}).show();
 	}
+
+	salaryAlert(){
+		new Noty({
+			type:"error",
+			layout:"topRight",
+			text:"This Month Salary Haave Already Given !",
+			timeout:1000
+		}).show();
+	}
 }
 
 export default Notification = new Notification()

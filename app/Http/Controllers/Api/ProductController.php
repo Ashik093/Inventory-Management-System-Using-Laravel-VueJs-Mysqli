@@ -120,4 +120,14 @@ class ProductController extends Controller
         }
         $product->delete();
     }
+
+    public function updateStock(Request $request,$id){
+        $validatedData = $request->validate([
+            'quantity'=>'required|integer'
+        ]);
+
+        $product = Product::find($id);
+        $product->quantity = $request->quantity;
+        $product->save();
+    }
 }

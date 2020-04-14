@@ -24,3 +24,11 @@ Route::apiResource('/product','Api\ProductController');
 Route::apiResource('/expense','Api\ExpenseController');
 Route::Get('/today-expense','Api\ExpenseController@dailyExpense');
 Route::Get('/monthly-expense','Api\ExpenseController@monthlyExpense');
+//salary
+Route::Post('/give-salary','Api\SalaryController@pay');
+Route::Get('/all-salary','Api\SalaryController@index');
+Route::Get('/view-monthly-salary/{month}/{year}','Api\SalaryController@monthlySalary');
+//stock
+Route::Patch('/product-stock-update/{id}','Api\ProductController@updateStock');
+
+

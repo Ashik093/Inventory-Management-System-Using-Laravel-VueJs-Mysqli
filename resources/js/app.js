@@ -43,9 +43,7 @@ const router = new VueRouter({
 	mode:'history'
 })
 
-
-
 const app = new Vue({
     el: '#app',
-    router
+    router,
 });

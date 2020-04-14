@@ -326,6 +326,41 @@
                     </ul>
                   </li>
 
+                  <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                      <i class="fas fa-money-bill-wave" style="font-size: 14px;margin-right: 7px;margin-left: 5px;"></i>
+
+                      <p>
+                        Salary
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <router-link to="/add-salary" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Add Salary</p>
+                        </router-link>
+                      </li>
+                      <li class="nav-item">
+                        <router-link to="/all-salary" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>All Salary</p>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li class="nav-item has-treeview">
+                    <router-link to="/all-stock" class="nav-link">
+                      <i class="fas fa-warehouse" style="font-size: 14px;margin-right: 7px;margin-left: 5px;"></i>
+                      <p>
+                        Stock
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </router-link>
+                  </li>
+
                 </ul>
               </nav>
               <!-- /.sidebar-menu -->
@@ -359,6 +394,8 @@
           </div>
         </div>
       </div>
+      
+
       <!-- ./wrapper -->
       <script src="{{asset('js/app.js')}}"></script>
       <!-- jQuery -->

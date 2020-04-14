@@ -34,6 +34,16 @@ let editexpense = require('./components/expense/edit.vue').default;
 let dailyexpense = require('./components/expense/daily.vue').default;
 let monthlyexpense = require('./components/expense/monthly.vue').default;
 
+//salary
+let addsalary = require('./components/salary/create.vue').default;
+let allsalary = require('./components/salary/index.vue').default;
+let paysalary = require('./components/salary/pay.vue').default;
+let viewsalary = require('./components/salary/view.vue').default;
+
+//stock
+let allstock = require('./components/stock/index.vue').default;
+let editstock = require('./components/stock/edit.vue').default;
+
 
 export const routes =[
 	//auth
@@ -44,29 +54,40 @@ export const routes =[
 
 	//home
 	{path:'/dashboard',component:home,name:'dashboard'},
-	 //employee
-	 {path:'/add-employee',component:addemployee,name:'addemployee'},
-	 {path:'/all-employee',component:allemployee,name:'allemployee'},
-	 {path:'/edit-employee/:id',component:editemployee,name:'editemployee'},
-	 //supplier
-	 {path:'/add-supplier',component:addsupplier,name:'addsupplier'},
-	 {path:'/all-supplier',component:allsupplier,name:'allsupplier'},
-	 {path:'/edit-supplier/:id',component:editsupplier,name:'editsupplier'},
 
-	 //category
-	 {path:'/add-category',component:addcategory,name:'addcategory'},
-	 {path:'/all-category',component:allcategory,name:'allcategory'},
-	 {path:'/edit-category/:id',component:editcategory,name:'editcategory'},
+	//employee
+	{path:'/add-employee',component:addemployee,name:'addemployee'},
+	{path:'/all-employee',component:allemployee,name:'allemployee'},
+	{path:'/edit-employee/:id',component:editemployee,name:'editemployee'},
+	//supplier
+	{path:'/add-supplier',component:addsupplier,name:'addsupplier'},
+	{path:'/all-supplier',component:allsupplier,name:'allsupplier'},
+	{path:'/edit-supplier/:id',component:editsupplier,name:'editsupplier'},
 
-	 //product
-	 {path:'/add-product',component:addproduct,name:'addproduct'},
-	 {path:'/all-product',component:allproduct,name:'allproduct'},
-	 {path:'/edit-product/:id',component:editproduct,name:'editproduct'},
+	//category
+	{path:'/add-category',component:addcategory,name:'addcategory'},
+	{path:'/all-category',component:allcategory,name:'allcategory'},
+	{path:'/edit-category/:id',component:editcategory,name:'editcategory'},
 
-	 //expense
-	 {path:'/add-expense',component:addexpense,name:'addexpense'},
-	 {path:'/all-expense',component:allexpense,name:'allexpense'},
-	 {path:'/edit-expense/:id',component:editexpense,name:'editexpense'},
-	 {path:'/today-expense',component:dailyexpense,name:'dailyexpense'},
-	 {path:'/monthly-expense',component:monthlyexpense,name:'monthlyexpense'},
+	//product
+	{path:'/add-product',component:addproduct,name:'addproduct'},
+	{path:'/all-product',component:allproduct,name:'allproduct'},
+	{path:'/edit-product/:id',component:editproduct,name:'editproduct'},
+
+	//expense
+	{path:'/add-expense',component:addexpense,name:'addexpense'},
+	{path:'/all-expense',component:allexpense,name:'allexpense'},
+	{path:'/edit-expense/:id',component:editexpense,name:'editexpense'},
+	{path:'/today-expense',component:dailyexpense,name:'dailyexpense'},
+	{path:'/monthly-expense',component:monthlyexpense,name:'monthlyexpense'},
+
+	//salary
+	{path:'/add-salary',component:addsalary,name:'addsalary'},
+	{path:'/all-salary',component:allsalary,name:'allsalary'},
+	{path:'/pay-salary/:id',component:paysalary,name:'paysalary'},
+	{path:'/view-salary/:month/:year',component:viewsalary,name:'viewsalary'},
+
+	//stock
+	{path:'/all-stock',component:allstock,name:'allstock'},
+	{path:'/edit-stock/:id',component:editstock,name:'editstock'},
 ]
