@@ -30,5 +30,7 @@ Route::Get('/all-salary','Api\SalaryController@index');
 Route::Get('/view-monthly-salary/{month}/{year}','Api\SalaryController@monthlySalary');
 //stock
 Route::Patch('/product-stock-update/{id}','Api\ProductController@updateStock');
+//customer
+Route::apiResource('/customer','Api\CustomerController');
 
 

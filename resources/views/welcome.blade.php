@@ -361,6 +361,30 @@
                     </router-link>
                   </li>
 
+                  <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                      <i class="fas fa-users" style="font-size: 14px;margin-right: 7px;margin-left: 5px;"></i>
+                      <p>
+                        Customer
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <router-link to="/add-customer" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Add Customer</p>
+                        </router-link>
+                      </li>
+                      <li class="nav-item">
+                        <router-link to="/all-customer" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>All Customer</p>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </li>
+
                 </ul>
               </nav>
               <!-- /.sidebar-menu -->
