@@ -26,7 +26,7 @@
 					<!-- /.card-header -->
 					<div class="card-body">
 						<label for="">Search</label>
-						<input type="text" class="form- mb-4" style="width: 20%;" v-model="search">
+						<input type="text" class="form-control mb-4" style="width: 20%;" v-model="search">
 						<table id="example2" class="table table-bordered table-hover">
 							<thead>
 								<tr>

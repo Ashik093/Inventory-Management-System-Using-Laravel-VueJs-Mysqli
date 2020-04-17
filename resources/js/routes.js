@@ -49,6 +49,9 @@ let addcustomer = require('./components/customer/create.vue').default;
 let allcustomer = require('./components/customer/index.vue').default;
 let editcustomer = require('./components/customer/edit.vue').default;
 
+//point of sale
+let pointofsale = require('./components/pos/pos.vue').default;
+
 export const routes =[
 	//auth
 	{path:'/',component:login,name:'/'},
@@ -99,4 +102,8 @@ export const routes =[
 	{path:'/add-customer',component:addcustomer,name:'addcustomer'},
 	{path:'/all-customer',component:allcustomer,name:'allcustomer'},
 	{path:'/edit-customer/:id',component:editcustomer,name:'editcustomer'},
+
+	//pos
+	{path:'/point-of-sale',component:pointofsale,name:'pointofsale'},
+
 ]
