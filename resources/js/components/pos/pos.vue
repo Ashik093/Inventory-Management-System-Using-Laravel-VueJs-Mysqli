@@ -20,7 +20,7 @@
 				<div class="card">
 					<div class="card-header bg-primary">
 						<h3 class="card-title">Cart</h3>
-						<button class="btn btn-success btn-sm float-sm-right">Add Customer</button>
+						<button class="btn btn-success btn-sm float-sm-right" data-toggle="modal" data-target="#exampleModal">Add Customer</button>
 				 	</div>
 					<!-- /.card-header -->
 					<div class="card-body">
@@ -84,9 +84,7 @@
 			           					    <label>Customer Name</label>
 			          			            <select class="form-control">
 			          			            	<option selected="" disabled="" value="null">Select Customer Name</option>
-			          			               	<option value="">Customer 1</option>
-			          			               	<option value="">Customer 2</option>
-			          			               	<option value="">Customer 3</option>
+			          			               	<option v-for="customer in customers" :value="customer.id">{{ customer.name }}</option>
 			          			            </select>
 			           					</div>
 			           					<div class="form-group">
@@ -140,7 +138,7 @@
 
 						  	<div class="card-group">
 						  	  <div class="row">
-						  	  	<div class="card col-md-3" v-for="product in filterSearch" :key="product.id">
+						  	  	<div class="card ml-4" v-for="product in filterSearch" :key="product.id">
 						  	    <img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
 						  	    <div class="card-body">
 						  	      <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
@@ -161,7 +159,7 @@
 
 						  	<div class="card-group">
 						  	  <div class="row">
-						  	  	<div class="card" v-for="product in getfilterSearch" :key="product.id">
+						  	  	<div class="card ml-4" v-for="product in getfilterSearch" :key="product.id">
 						  	    <img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
 						  	    <div class="card-body">
 						  	      <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
@@ -182,6 +180,61 @@
 				</div>
 			</div>
 		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Add New Customer</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form @submit.prevent="insertCustomer" method="post" enctype="multipart/form-data">
+           			<div class="row">
+           				<div class="col-md-6">
+           					<small class="text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
+           					<div class="form-group">
+           					    <label>Customer Name</label>
+          			                <input type="text" class="form-control" placeholder="Enter Customer Name" v-model="form.name">
+           					</div>
+
+           					<small class="text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
+           					<div class="form-group">
+           					    <label>Customer Phone</label>
+          			                <input type="text" class="form-control" placeholder="Enter Customer Phone" v-model="form.phone">
+           					</div>
+           					<div class="form-group">
+           					    <label>Customer Photo</label>
+          			                <input type="file" class="form-control" @change="onFileSelected">
+           					</div>
+           				</div>
+           				<div class="col-md-6">
+           					<small class="text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
+           					<div class="form-group">
+           					    <label>Customer Email</label>
+          			                <input type="email" class="form-control" placeholder="Enter Customer Email" v-model="form.email">
+           					</div>
+           					<small class="text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
+           					<div class="form-group">
+           					    <label>Customer Address</label>
+          			                <input type="text" class="form-control" placeholder="Enter Customer Address" v-model="form.address">
+           					</div>
+           					<div class="form-group">
+           					    <img :src="form.photo" alt="" style="width: 50px;height: 50px;">
+           					</div>
+           				</div>
+           			</div>
+           			<button type="submit" class="btn btn-primary">Add Customer</button>
+           		</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 	</div>
 </template>
 <script>
@@ -198,6 +251,15 @@
 				allcategories:{},
 				getproducts:[],
 				getSearch:'',
+				form:{
+					name:null,
+					email:null,
+					phone:null,
+					address:null,
+					photo:null
+				},
+				errors:{},
+				customers:{}
 			}
 		},
 		computed:{
@@ -227,12 +289,44 @@
 				axios.get('/api/get-product/'+id)
 					.then(({data})=>(this.getproducts=data))
 					.catch()
+			},
+			onFileSelected(event){
+				let file = event.target.files[0]
+				if (file.size > 1048770) {
+					Notification.image()
+				}else{
+					let reader = new FileReader()
+					reader.onload = event =>{
+						this.form.photo = event.target.result
+					};
+					reader.readAsDataURL(file)
+				}
+			},
+			insertCustomer(){
+				axios.post('/api/customer',this.form)
+					.then(()=>{
+						$('#closeBtn').click()
+						Notification.success()
+						this.$router.push({name:'pointofsale'})
+						Reload.$emit('AfterCustomerAdd')
+
+					})
+					.catch(error => this.errors = error.response.data.errors)
+			},
+			getCustomer(){
+				axios.get('/api/customer')
+					.then(({data})=>(this.customers=data))
+					.catch()
 			}
 			
 		},
 		created(){
 			this.allProduct()
 			this.allCategory()
+			this.getCustomer()
+			Reload.$on('AfterCustomerAdd',()=>{
+				this.getCustomer()
+			})
 		}
 	}
 </script>

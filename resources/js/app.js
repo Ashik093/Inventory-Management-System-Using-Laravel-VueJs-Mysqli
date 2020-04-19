@@ -21,6 +21,8 @@ window.User = User
 import Swal from 'sweetalert2'
 window.Swal = Swal
 
+window.Reload = new Vue()
+
 //notification
 import Notification from "./Helpers/Notification"
 window.Notification = Notification
