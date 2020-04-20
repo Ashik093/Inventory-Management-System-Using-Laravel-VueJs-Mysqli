@@ -35,33 +35,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Dell</td>
-									<td>1</td>
-									<td>455555</td>
-									<td>458966</td>
-									<td><span class="btn btn-danger btn-sm"><i class="fas fa-minus-circle"></i></span></td>
-								</tr>
-								<tr>
-									<td>Dell</td>
-									<td>1</td>
-									<td>455555</td>
-									<td>458966</td>
-									<td><span class="btn btn-danger btn-sm"><i class="fas fa-minus-circle"></i></span></td>
-								</tr>
-								<tr>
-									<td>Dell</td>
-									<td>1</td>
-									<td>455555</td>
-									<td>458966</td>
-									<td><span class="btn btn-danger btn-sm"><i class="fas fa-minus-circle"></i></span></td>
-								</tr>
-								<tr>
-									<td>Dell</td>
-									<td>1</td>
-									<td>455555</td>
-									<td>458966</td>
-									<td><span class="btn btn-danger btn-sm"><i class="fas fa-minus-circle"></i></span></td>
+								<tr v-for="cart in carts" :key="cart.id">
+									<td>{{ cart.product_name }}</td>
+									<td><input type="text" readonly="" style="width: 30%;" :value="cart.product_quantity"><div class="btn-group"><button class="btn btn-success btn-sm" style="height: 25px;">+</button><button class="btn btn-danger btn-sm" style="height: 25px;">-</button></div></td>
+									<td>{{ cart.product_price }}</td>
+									<td>{{ cart.sub_total }}</td>
+									<td><span class="btn btn-danger btn-sm" @click="removeCartItem(cart.id)"><i class="fas fa-minus-circle"></i></span></td>
 								</tr>
 								
 							</tbody>
@@ -138,16 +117,18 @@
 
 						  	<div class="card-group">
 						  	  <div class="row">
-						  	  	<div class="card ml-4" v-for="product in filterSearch" :key="product.id">
-						  	    <img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
-						  	    <div class="card-body">
-						  	      <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
-						  	       <center>
-						  	       	<p v-if="product.quantity < 10 && product.quantity > 0"><span class="badge badge-warning">Low Stock({{ product.quantity }})</span></p>
-						  	       	<p v-else-if="product.quantity < 1"><span class="badge badge-danger">Out Of Stock({{ product.quantity }})</span></p>
-						  	       	<p v-else=""><span class="badge badge-success">Available({{ product.quantity }})</span></p>
-						  	       </center>     
-						  	    </div>
+						  	  	<div class="card col-md-3" v-for="product in filterSearch" :key="product.id">
+						  	    <button class="btn btn-sm" @click.prevent="addToCart(product.id)">
+						  	    	<img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
+						  	    	<div class="card-body">
+						  	    	  <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
+						  	    	   <center>
+						  	    	   	<p v-if="product.quantity < 10 && product.quantity > 0"><span class="badge badge-warning">Low Stock({{ product.quantity }})</span></p>
+						  	    	   	<p v-else-if="product.quantity < 1"><span class="badge badge-danger">Out Of Stock({{ product.quantity }})</span></p>
+						  	    	   	<p v-else=""><span class="badge badge-success">Available({{ product.quantity }})</span></p>
+						  	    	   </center>     
+						  	    	</div>
+						  	    </button>
 						  	  </div>
 						  	  </div>
 						  	</div>
@@ -159,16 +140,18 @@
 
 						  	<div class="card-group">
 						  	  <div class="row">
-						  	  	<div class="card ml-4" v-for="product in getfilterSearch" :key="product.id">
-						  	    <img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
-						  	    <div class="card-body">
-						  	      <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
-						  	       <center>
-						  	       	<p v-if="product.quantity < 10 && product.quantity > 0"><span class="badge badge-warning">Low Stock({{ product.quantity }})</span></p>
-						  	       	<p v-else-if="product.quantity < 1"><span class="badge badge-danger">Out Of Stock({{ product.quantity }})</span></p>
-						  	       	<p v-else=""><span class="badge badge-success">Available({{ product.quantity }})</span></p>
-						  	       </center>     
-						  	    </div>
+						  	  	<div class="card col-md-3" v-for="product in getfilterSearch" :key="product.id">
+						  	  	<button class="btn btn-sm" @click.prevent="addToCart(product.id)">
+							  	    <img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
+							  	    <div class="card-body">
+							  	      <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
+							  	       <center>
+							  	       	<p v-if="product.quantity < 10 && product.quantity > 0"><span class="badge badge-warning">Low Stock({{ product.quantity }})</span></p>
+							  	       	<p v-else-if="product.quantity < 1"><span class="badge badge-danger">Out Of Stock({{ product.quantity }})</span></p>
+							  	       	<p v-else=""><span class="badge badge-success">Available({{ product.quantity }})</span></p>
+							  	       </center>     
+							  	    </div>
+						  	    </button>
 						  	  </div>
 						  	  </div>
 						  	</div>
@@ -259,7 +242,8 @@
 					photo:null
 				},
 				errors:{},
-				customers:{}
+				customers:{},
+				carts:{}
 			}
 		},
 		computed:{
@@ -307,7 +291,6 @@
 					.then(()=>{
 						$('#closeBtn').click()
 						Notification.success()
-						this.$router.push({name:'pointofsale'})
 						Reload.$emit('AfterCustomerAdd')
 
 					})
@@ -317,6 +300,27 @@
 				axios.get('/api/customer')
 					.then(({data})=>(this.customers=data))
 					.catch()
+			},
+			addToCart(id){
+				axios.get('/api/add-to-cart/'+id)
+					.then(()=>{
+						Notification.success()
+						Reload.$emit('AfterAddToCart')
+					})
+					.catch()
+			},
+			getCartProduct(){
+				axios.get('/api/get-cart-product')
+					.then(({data})=>(this.carts=data))
+					.catch()
+			},
+			removeCartItem(id){
+				axios.get('/api/remove-from-cart/'+id)
+					.then(()=>{
+						Notification.success()
+						Reload.$emit('AfterAddToCart')
+					})
+					.catch()
 			}
 			
 		},
@@ -324,9 +328,14 @@
 			this.allProduct()
 			this.allCategory()
 			this.getCustomer()
+			this.getCartProduct()
 			Reload.$on('AfterCustomerAdd',()=>{
 				this.getCustomer()
 			})
+			Reload.$on('AfterAddToCart',()=>{
+				this.getCartProduct()
+			})
+			
 		}
 	}
 </script>

@@ -34,5 +34,9 @@ Route::Patch('/product-stock-update/{id}','Api\ProductController@updateStock');
 Route::apiResource('/customer','Api\CustomerController');
 //pos
 Route::Get('/get-product/{id}','Api\PosController@getProductById');
+Route::Get('/add-to-cart/{id}','Api\CartController@addToCart');
+Route::Get('/get-cart-product','Api\CartController@getAll');
+Route::Get('/remove-from-cart/{id}','Api\CartController@removeCartItem');
+
 
 
