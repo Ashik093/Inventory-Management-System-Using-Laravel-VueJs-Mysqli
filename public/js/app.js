@@ -4288,6 +4288,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     if (!User.loggedIn()) {
@@ -4409,6 +4416,16 @@ __webpack_require__.r(__webpack_exports__);
     removeCartItem: function removeCartItem(id) {
       axios.get('/api/remove-from-cart/' + id).then(function () {
         Notification.success();
+        Reload.$emit('AfterAddToCart');
+      })["catch"]();
+    },
+    increment: function increment(id) {
+      axios.get('/api/increment-quantity/' + id).then(function () {
+        Reload.$emit('AfterAddToCart');
+      })["catch"]();
+    },
+    decrement: function decrement(id) {
+      axios.get('/api/decrement-quantity/' + id).then(function () {
         Reload.$emit('AfterAddToCart');
       })["catch"]();
     }
@@ -51355,7 +51372,48 @@ var render = function() {
                         attrs: { type: "text", readonly: "" },
                         domProps: { value: cart.product_quantity }
                       }),
-                      _vm._m(3, true)
+                      _vm._v(" "),
+                      _c("div", { staticClass: "btn-group" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success btn-sm",
+                            staticStyle: { height: "25px" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.increment(cart.id)
+                              }
+                            }
+                          },
+                          [_vm._v("+")]
+                        ),
+                        _vm._v(" "),
+                        cart.product_quantity > 1
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger btn-sm",
+                                staticStyle: { height: "25px" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.decrement(cart.id)
+                                  }
+                                }
+                              },
+                              [_vm._v("-")]
+                            )
+                          : _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-danger btn-sm",
+                                staticStyle: { height: "25px" },
+                                attrs: { disabled: "" }
+                              },
+                              [_vm._v("-")]
+                            )
+                      ])
                     ]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(cart.product_price))]),
@@ -51382,7 +51440,7 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm._m(4),
+            _vm._m(3),
             _vm._v(" "),
             _c("div", { staticClass: "mt-3", staticStyle: { width: "100%" } }, [
               _c("form", [
@@ -51419,11 +51477,11 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
+                    _vm._m(4),
+                    _vm._v(" "),
                     _vm._m(5),
                     _vm._v(" "),
-                    _vm._m(6),
-                    _vm._v(" "),
-                    _vm._m(7)
+                    _vm._m(6)
                   ])
                 ]),
                 _vm._v(" "),
@@ -51440,7 +51498,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-md-7" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(8),
+          _vm._m(7),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c(
@@ -51450,7 +51508,7 @@ var render = function() {
                 attrs: { id: "pills-tab", role: "tablist" }
               },
               [
-                _vm._m(9),
+                _vm._m(8),
                 _vm._v(" "),
                 _vm._l(_vm.allcategories, function(category) {
                   return _c(
@@ -51822,7 +51880,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(10),
+              _vm._m(9),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -52016,7 +52074,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(11)
+              _vm._m(10)
             ])
           ]
         )
@@ -52066,29 +52124,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Action")])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "btn-group" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-success btn-sm",
-          staticStyle: { height: "25px" }
-        },
-        [_vm._v("+")]
-      ),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger btn-sm",
-          staticStyle: { height: "25px" }
-        },
-        [_vm._v("-")]
-      )
     ])
   },
   function() {

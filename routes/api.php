@@ -37,6 +37,8 @@ Route::Get('/get-product/{id}','Api\PosController@getProductById');
 Route::Get('/add-to-cart/{id}','Api\CartController@addToCart');
 Route::Get('/get-cart-product','Api\CartController@getAll');
 Route::Get('/remove-from-cart/{id}','Api\CartController@removeCartItem');
+Route::Get('/increment-quantity/{id}','Api\CartController@increment');
+Route::Get('/decrement-quantity/{id}','Api\CartController@decrement');
 
 
 

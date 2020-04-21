@@ -37,7 +37,14 @@
 							<tbody>
 								<tr v-for="cart in carts" :key="cart.id">
 									<td>{{ cart.product_name }}</td>
-									<td><input type="text" readonly="" style="width: 30%;" :value="cart.product_quantity"><div class="btn-group"><button class="btn btn-success btn-sm" style="height: 25px;">+</button><button class="btn btn-danger btn-sm" style="height: 25px;">-</button></div></td>
+									<td>
+										<input type="text" readonly="" style="width: 30%;" :value="cart.product_quantity">
+										<div class="btn-group">
+											<button @click.prevent="increment(cart.id)" class="btn btn-success btn-sm" style="height: 25px;">+</button>
+											<button @click.prevent="decrement(cart.id)" class="btn btn-danger btn-sm" style="height: 25px;" v-if="cart.product_quantity > 1">-</button>
+											<button class="btn btn-danger btn-sm" style="height: 25px;" v-else="" disabled="">-</button>
+										</div>
+									</td>
 									<td>{{ cart.product_price }}</td>
 									<td>{{ cart.sub_total }}</td>
 									<td><span class="btn btn-danger btn-sm" @click="removeCartItem(cart.id)"><i class="fas fa-minus-circle"></i></span></td>
@@ -318,6 +325,20 @@
 				axios.get('/api/remove-from-cart/'+id)
 					.then(()=>{
 						Notification.success()
+						Reload.$emit('AfterAddToCart')
+					})
+					.catch()
+			},
+			increment(id){
+				axios.get('/api/increment-quantity/'+id)
+					.then(()=>{
+						Reload.$emit('AfterAddToCart')
+					})
+					.catch()
+			},
+			decrement(id){
+				axios.get('/api/decrement-quantity/'+id)
+					.then(()=>{
 						Reload.$emit('AfterAddToCart')
 					})
 					.catch()
