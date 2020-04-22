@@ -55,10 +55,10 @@
 	
 						<div class="card mt-3" style="width: 100%;">
 						  <ul class="list-group list-group-flush">
-						    <li class="list-group-item">Total Quantity: <span style="float: right;font-weight: bold;">12</span></li>
-						    <li class="list-group-item">Sub Total: <span style="float: right;font-weight: bold;">200000</span></li>
-						    <li class="list-group-item">Vat: <span style="float: right;font-weight: bold;">5%</span></li>
-						    <li class="list-group-item">Total: <span style="float: right;font-weight: bold;">2500000</span></li>
+						    <li class="list-group-item">Total Quantity: <span style="float: right;font-weight: bold;">{{ qty }}</span></li>
+						    <li class="list-group-item">Sub Total: <span style="float: right;font-weight: bold;">{{ subtotal }} TK</span></li>
+						    <li class="list-group-item">Vat: <span style="float: right;font-weight: bold;">{{ vat.vat }}%</span></li>
+						    <li class="list-group-item">Total: <span style="float: right;font-weight: bold;">{{ (subtotal*vat.vat/100) + subtotal }} TK</span></li>
 						  </ul>
 						</div>
 						<div class="mt-3" style="width: 100%;">
@@ -85,9 +85,9 @@
 			           					    <label>Payment By</label>
 			          			            <select class="form-control">
 			          			            	<option selected="" disabled="" value="null">Select Payment Method</option>
-			          			               	<option value="">HandCash</option>
-			          			               	<option value="">Cheque</option>
-			          			               	<option value="">Visa</option>
+			          			               	<option value="HandCash">HandCash</option>
+			          			               	<option value="Cheque">Cheque</option>
+			          			               	<option value="GiftCard">Gift Card</option>
 			          			            </select>
 			           					</div>
 			           					
@@ -125,7 +125,7 @@
 						  	<div class="card-group">
 						  	  <div class="row">
 						  	  	<div class="card col-md-3" v-for="product in filterSearch" :key="product.id">
-						  	    <button class="btn btn-sm" @click.prevent="addToCart(product.id)">
+						  	    <button class="btn btn-sm" v-if="product.quantity > 0" @click.prevent="addToCart(product.id)">
 						  	    	<img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
 						  	    	<div class="card-body">
 						  	    	  <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
@@ -136,6 +136,18 @@
 						  	    	   </center>     
 						  	    	</div>
 						  	    </button>
+						  	    <button class="btn btn-sm" v-else="" disabled="">
+						  	    	<img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
+						  	    	<div class="card-body">
+						  	    	  <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
+						  	    	   <center>
+						  	    	   	<p v-if="product.quantity < 10 && product.quantity > 0"><span class="badge badge-warning">Low Stock({{ product.quantity }})</span></p>
+						  	    	   	<p v-else-if="product.quantity < 1"><span class="badge badge-danger">Out Of Stock({{ product.quantity }})</span></p>
+						  	    	   	<p v-else=""><span class="badge badge-success">Available({{ product.quantity }})</span></p>
+						  	    	   </center>     
+						  	    	</div>
+						  	    </button>
+
 						  	  </div>
 						  	  </div>
 						  	</div>
@@ -148,7 +160,18 @@
 						  	<div class="card-group">
 						  	  <div class="row">
 						  	  	<div class="card col-md-3" v-for="product in getfilterSearch" :key="product.id">
-						  	  	<button class="btn btn-sm" @click.prevent="addToCart(product.id)">
+						  	  	<button class="btn btn-sm" v-if="product.quantity>0" @click.prevent="addToCart(product.id)">
+							  	    <img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
+							  	    <div class="card-body">
+							  	      <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
+							  	       <center>
+							  	       	<p v-if="product.quantity < 10 && product.quantity > 0"><span class="badge badge-warning">Low Stock({{ product.quantity }})</span></p>
+							  	       	<p v-else-if="product.quantity < 1"><span class="badge badge-danger">Out Of Stock({{ product.quantity }})</span></p>
+							  	       	<p v-else=""><span class="badge badge-success">Available({{ product.quantity }})</span></p>
+							  	       </center>     
+							  	    </div>
+						  	    </button>
+						  	    <button class="btn btn-sm" v-else="" disabled="">
 							  	    <img class="card-img-top" :src="product.picture" style="width: 100px;height: 60px;margin: auto;" alt="Card image cap">
 							  	    <div class="card-body">
 							  	      <center><p class="card-text" style="margin: auto;font-weight: bold;">{{ product.name }}</p></center>
@@ -250,7 +273,8 @@
 				},
 				errors:{},
 				customers:{},
-				carts:{}
+				carts:{},
+				vat:''
 			}
 		},
 		computed:{
@@ -263,6 +287,20 @@
 				return this.getproducts.filter(getproduct =>{
 					return getproduct.name.match(this.getSearch)
 				})
+			},
+			qty(){
+				let sum=0;
+				for(let i=0;i<this.carts.length;i++){
+					sum += (parseFloat(this.carts[i].product_quantity))
+				}
+				return sum
+			},
+			subtotal(){
+				let sum=0;
+				for(let i=0;i<this.carts.length;i++){
+					sum += (parseFloat(this.carts[i].sub_total))
+				}
+				return sum
 			}
 		},
 		methods:{
@@ -342,6 +380,11 @@
 						Reload.$emit('AfterAddToCart')
 					})
 					.catch()
+			},
+			vats(){
+				axios.get('/api/vat')
+					.then(({data})=>(this.vat=data))
+					.catch()
 			}
 			
 		},
@@ -350,6 +393,7 @@
 			this.allCategory()
 			this.getCustomer()
 			this.getCartProduct()
+			this.vats()
 			Reload.$on('AfterCustomerAdd',()=>{
 				this.getCustomer()
 			})

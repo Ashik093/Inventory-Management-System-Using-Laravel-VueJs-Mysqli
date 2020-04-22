@@ -4295,6 +4295,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     if (!User.loggedIn()) {
@@ -4319,7 +4342,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       errors: {},
       customers: {},
-      carts: {}
+      carts: {},
+      vat: ''
     };
   },
   computed: {
@@ -4336,6 +4360,24 @@ __webpack_require__.r(__webpack_exports__);
       return this.getproducts.filter(function (getproduct) {
         return getproduct.name.match(_this2.getSearch);
       });
+    },
+    qty: function qty() {
+      var sum = 0;
+
+      for (var i = 0; i < this.carts.length; i++) {
+        sum += parseFloat(this.carts[i].product_quantity);
+      }
+
+      return sum;
+    },
+    subtotal: function subtotal() {
+      var sum = 0;
+
+      for (var i = 0; i < this.carts.length; i++) {
+        sum += parseFloat(this.carts[i].sub_total);
+      }
+
+      return sum;
     }
   },
   methods: {
@@ -4428,20 +4470,29 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/decrement-quantity/' + id).then(function () {
         Reload.$emit('AfterAddToCart');
       })["catch"]();
+    },
+    vats: function vats() {
+      var _this10 = this;
+
+      axios.get('/api/vat').then(function (_ref6) {
+        var data = _ref6.data;
+        return _this10.vat = data;
+      })["catch"]();
     }
   },
   created: function created() {
-    var _this10 = this;
+    var _this11 = this;
 
     this.allProduct();
     this.allCategory();
     this.getCustomer();
     this.getCartProduct();
+    this.vats();
     Reload.$on('AfterCustomerAdd', function () {
-      _this10.getCustomer();
+      _this11.getCustomer();
     });
     Reload.$on('AfterAddToCart', function () {
-      _this10.getCartProduct();
+      _this11.getCartProduct();
     });
   }
 });
@@ -51440,7 +51491,63 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm._m(3),
+            _c(
+              "div",
+              { staticClass: "card mt-3", staticStyle: { width: "100%" } },
+              [
+                _c("ul", { staticClass: "list-group list-group-flush" }, [
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v("Total Quantity: "),
+                    _c(
+                      "span",
+                      {
+                        staticStyle: { float: "right", "font-weight": "bold" }
+                      },
+                      [_vm._v(_vm._s(_vm.qty))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v("Sub Total: "),
+                    _c(
+                      "span",
+                      {
+                        staticStyle: { float: "right", "font-weight": "bold" }
+                      },
+                      [_vm._v(_vm._s(_vm.subtotal) + " TK")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v("Vat: "),
+                    _c(
+                      "span",
+                      {
+                        staticStyle: { float: "right", "font-weight": "bold" }
+                      },
+                      [_vm._v(_vm._s(_vm.vat.vat) + "%")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v("Total: "),
+                    _c(
+                      "span",
+                      {
+                        staticStyle: { float: "right", "font-weight": "bold" }
+                      },
+                      [
+                        _vm._v(
+                          _vm._s(
+                            (_vm.subtotal * _vm.vat.vat) / 100 + _vm.subtotal
+                          ) + " TK"
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ]
+            ),
             _vm._v(" "),
             _c("div", { staticClass: "mt-3", staticStyle: { width: "100%" } }, [
               _c("form", [
@@ -51477,11 +51584,11 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
+                    _vm._m(3),
+                    _vm._v(" "),
                     _vm._m(4),
                     _vm._v(" "),
-                    _vm._m(5),
-                    _vm._v(" "),
-                    _vm._m(6)
+                    _vm._m(5)
                   ])
                 ]),
                 _vm._v(" "),
@@ -51498,7 +51605,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "col-md-7" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(7),
+          _vm._m(6),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c(
@@ -51508,7 +51615,7 @@ var render = function() {
                 attrs: { id: "pills-tab", role: "tablist" }
               },
               [
-                _vm._m(8),
+                _vm._m(7),
                 _vm._v(" "),
                 _vm._l(_vm.allcategories, function(category) {
                   return _c(
@@ -51591,107 +51698,216 @@ var render = function() {
                             "div",
                             { key: product.id, staticClass: "card col-md-3" },
                             [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.addToCart(product.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("img", {
-                                    staticClass: "card-img-top",
-                                    staticStyle: {
-                                      width: "100px",
-                                      height: "60px",
-                                      margin: "auto"
+                              product.quantity > 0
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.addToCart(product.id)
+                                        }
+                                      }
                                     },
-                                    attrs: {
-                                      src: product.picture,
-                                      alt: "Card image cap"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "card-body" },
                                     [
-                                      _c("center", [
-                                        _c(
-                                          "p",
-                                          {
-                                            staticClass: "card-text",
-                                            staticStyle: {
-                                              margin: "auto",
-                                              "font-weight": "bold"
-                                            }
-                                          },
-                                          [_vm._v(_vm._s(product.name))]
-                                        )
-                                      ]),
+                                      _c("img", {
+                                        staticClass: "card-img-top",
+                                        staticStyle: {
+                                          width: "100px",
+                                          height: "60px",
+                                          margin: "auto"
+                                        },
+                                        attrs: {
+                                          src: product.picture,
+                                          alt: "Card image cap"
+                                        }
+                                      }),
                                       _vm._v(" "),
-                                      _c("center", [
-                                        product.quantity < 10 &&
-                                        product.quantity > 0
-                                          ? _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-warning"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Low Stock(" +
-                                                      _vm._s(product.quantity) +
-                                                      ")"
+                                      _c(
+                                        "div",
+                                        { staticClass: "card-body" },
+                                        [
+                                          _c("center", [
+                                            _c(
+                                              "p",
+                                              {
+                                                staticClass: "card-text",
+                                                staticStyle: {
+                                                  margin: "auto",
+                                                  "font-weight": "bold"
+                                                }
+                                              },
+                                              [_vm._v(_vm._s(product.name))]
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("center", [
+                                            product.quantity < 10 &&
+                                            product.quantity > 0
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-warning"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Low Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
                                                   )
-                                                ]
-                                              )
-                                            ])
-                                          : product.quantity < 1
-                                          ? _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-danger"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Out Of Stock(" +
-                                                      _vm._s(product.quantity) +
-                                                      ")"
+                                                ])
+                                              : product.quantity < 1
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-danger"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Out Of Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
                                                   )
-                                                ]
-                                              )
-                                            ])
-                                          : _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-success"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Available(" +
-                                                      _vm._s(product.quantity) +
-                                                      ")"
+                                                ])
+                                              : _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-success"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Available(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
                                                   )
-                                                ]
-                                              )
-                                            ])
-                                      ])
-                                    ],
-                                    1
+                                                ])
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
+                                : _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-sm",
+                                      attrs: { disabled: "" }
+                                    },
+                                    [
+                                      _c("img", {
+                                        staticClass: "card-img-top",
+                                        staticStyle: {
+                                          width: "100px",
+                                          height: "60px",
+                                          margin: "auto"
+                                        },
+                                        attrs: {
+                                          src: product.picture,
+                                          alt: "Card image cap"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "card-body" },
+                                        [
+                                          _c("center", [
+                                            _c(
+                                              "p",
+                                              {
+                                                staticClass: "card-text",
+                                                staticStyle: {
+                                                  margin: "auto",
+                                                  "font-weight": "bold"
+                                                }
+                                              },
+                                              [_vm._v(_vm._s(product.name))]
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("center", [
+                                            product.quantity < 10 &&
+                                            product.quantity > 0
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-warning"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Low Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              : product.quantity < 1
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-danger"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Out Of Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              : _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-success"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Available(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
                             ]
                           )
                         }),
@@ -51746,107 +51962,216 @@ var render = function() {
                             "div",
                             { key: product.id, staticClass: "card col-md-3" },
                             [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-sm",
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.addToCart(product.id)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("img", {
-                                    staticClass: "card-img-top",
-                                    staticStyle: {
-                                      width: "100px",
-                                      height: "60px",
-                                      margin: "auto"
+                              product.quantity > 0
+                                ? _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-sm",
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.addToCart(product.id)
+                                        }
+                                      }
                                     },
-                                    attrs: {
-                                      src: product.picture,
-                                      alt: "Card image cap"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "card-body" },
                                     [
-                                      _c("center", [
-                                        _c(
-                                          "p",
-                                          {
-                                            staticClass: "card-text",
-                                            staticStyle: {
-                                              margin: "auto",
-                                              "font-weight": "bold"
-                                            }
-                                          },
-                                          [_vm._v(_vm._s(product.name))]
-                                        )
-                                      ]),
+                                      _c("img", {
+                                        staticClass: "card-img-top",
+                                        staticStyle: {
+                                          width: "100px",
+                                          height: "60px",
+                                          margin: "auto"
+                                        },
+                                        attrs: {
+                                          src: product.picture,
+                                          alt: "Card image cap"
+                                        }
+                                      }),
                                       _vm._v(" "),
-                                      _c("center", [
-                                        product.quantity < 10 &&
-                                        product.quantity > 0
-                                          ? _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-warning"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Low Stock(" +
-                                                      _vm._s(product.quantity) +
-                                                      ")"
+                                      _c(
+                                        "div",
+                                        { staticClass: "card-body" },
+                                        [
+                                          _c("center", [
+                                            _c(
+                                              "p",
+                                              {
+                                                staticClass: "card-text",
+                                                staticStyle: {
+                                                  margin: "auto",
+                                                  "font-weight": "bold"
+                                                }
+                                              },
+                                              [_vm._v(_vm._s(product.name))]
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("center", [
+                                            product.quantity < 10 &&
+                                            product.quantity > 0
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-warning"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Low Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
                                                   )
-                                                ]
-                                              )
-                                            ])
-                                          : product.quantity < 1
-                                          ? _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-danger"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Out Of Stock(" +
-                                                      _vm._s(product.quantity) +
-                                                      ")"
+                                                ])
+                                              : product.quantity < 1
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-danger"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Out Of Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
                                                   )
-                                                ]
-                                              )
-                                            ])
-                                          : _c("p", [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-success"
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "Available(" +
-                                                      _vm._s(product.quantity) +
-                                                      ")"
+                                                ])
+                                              : _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-success"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Available(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
                                                   )
-                                                ]
-                                              )
-                                            ])
-                                      ])
-                                    ],
-                                    1
+                                                ])
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
+                                : _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-sm",
+                                      attrs: { disabled: "" }
+                                    },
+                                    [
+                                      _c("img", {
+                                        staticClass: "card-img-top",
+                                        staticStyle: {
+                                          width: "100px",
+                                          height: "60px",
+                                          margin: "auto"
+                                        },
+                                        attrs: {
+                                          src: product.picture,
+                                          alt: "Card image cap"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        { staticClass: "card-body" },
+                                        [
+                                          _c("center", [
+                                            _c(
+                                              "p",
+                                              {
+                                                staticClass: "card-text",
+                                                staticStyle: {
+                                                  margin: "auto",
+                                                  "font-weight": "bold"
+                                                }
+                                              },
+                                              [_vm._v(_vm._s(product.name))]
+                                            )
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("center", [
+                                            product.quantity < 10 &&
+                                            product.quantity > 0
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-warning"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Low Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              : product.quantity < 1
+                                              ? _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-danger"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Out Of Stock(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              : _c("p", [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "badge badge-success"
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "Available(" +
+                                                          _vm._s(
+                                                            product.quantity
+                                                          ) +
+                                                          ")"
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                          ])
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
                             ]
                           )
                         }),
@@ -51880,7 +52205,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(9),
+              _vm._m(8),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c(
@@ -52074,7 +52399,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(10)
+              _vm._m(9)
             ])
           ]
         )
@@ -52130,54 +52455,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "card mt-3", staticStyle: { width: "100%" } },
-      [
-        _c("ul", { staticClass: "list-group list-group-flush" }, [
-          _c("li", { staticClass: "list-group-item" }, [
-            _vm._v("Total Quantity: "),
-            _c(
-              "span",
-              { staticStyle: { float: "right", "font-weight": "bold" } },
-              [_vm._v("12")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "list-group-item" }, [
-            _vm._v("Sub Total: "),
-            _c(
-              "span",
-              { staticStyle: { float: "right", "font-weight": "bold" } },
-              [_vm._v("200000")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "list-group-item" }, [
-            _vm._v("Vat: "),
-            _c(
-              "span",
-              { staticStyle: { float: "right", "font-weight": "bold" } },
-              [_vm._v("5%")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", { staticClass: "list-group-item" }, [
-            _vm._v("Total: "),
-            _c(
-              "span",
-              { staticStyle: { float: "right", "font-weight": "bold" } },
-              [_vm._v("2500000")]
-            )
-          ])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
       _c("label", [_vm._v("Pay")]),
       _vm._v(" "),
@@ -52206,11 +52483,11 @@ var staticRenderFns = [
           _vm._v("Select Payment Method")
         ]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("HandCash")]),
+        _c("option", { attrs: { value: "HandCash" } }, [_vm._v("HandCash")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("Cheque")]),
+        _c("option", { attrs: { value: "Cheque" } }, [_vm._v("Cheque")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "" } }, [_vm._v("Visa")])
+        _c("option", { attrs: { value: "GiftCard" } }, [_vm._v("Gift Card")])
       ])
     ])
   },
