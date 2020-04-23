@@ -62,28 +62,30 @@
 						  </ul>
 						</div>
 						<div class="mt-3" style="width: 100%;">
-						  	<form>
+						  	<form @submit.prevent="order" method="post">
 			           			<div class="row">
 			           				<div class="col-md-12">
-			           			
+			           					<small class="text-danger" v-if="errors.customer_id">Customer Name is Required</small>
 			           					<div class="form-group">
 			           					    <label>Customer Name</label>
-			          			            <select class="form-control">
-			          			            	<option selected="" disabled="" value="null">Select Customer Name</option>
-			          			               	<option v-for="customer in customers" :value="customer.id">{{ customer.name }}</option>
+			          			            <select class="form-control" v-model="customer_id">
+			          			            	<option value="null" selected="" disabled="">Select Customer Name</option>
+			          			               	<option v-for="customer in customers" :key="customer.id" :value="customer.id">{{ customer.name }}</option>
 			          			            </select>
 			           					</div>
+			           					<small class="text-danger" v-if="errors.pay">Pay Field Must Not Empty</small>
 			           					<div class="form-group">
 			           					    <label>Pay</label>
-			          			            <input type="text" class="form-control">
+			          			            <input type="text" class="form-control" v-model="pay">
 			           					</div>
 			           					<div class="form-group">
 			           					    <label>Due</label>
-			          			            <input type="text" class="form-control">
+			          			            <input type="text" class="form-control" readonly="" :value="dues">
 			           					</div>
+			           					<small class="text-danger" v-if="errors.payby">Please Select A Payment Method</small>
 										<div class="form-group">
 			           					    <label>Payment By</label>
-			          			            <select class="form-control">
+			          			            <select class="form-control" v-model="payby">
 			          			            	<option selected="" disabled="" value="null">Select Payment Method</option>
 			          			               	<option value="HandCash">HandCash</option>
 			          			               	<option value="Cheque">Cheque</option>
@@ -271,6 +273,9 @@
 					address:null,
 					photo:null
 				},
+				customer_id:null,
+				pay:null,
+				payby:null,
 				errors:{},
 				customers:{},
 				carts:{},
@@ -301,6 +306,13 @@
 					sum += (parseFloat(this.carts[i].sub_total))
 				}
 				return sum
+			},
+			dues(){
+				let result=0;
+				let total = (this.subtotal*this.vat.vat/100) + this.subtotal
+				result = total - this.pay
+
+				return result
 			}
 		},
 		methods:{
@@ -385,6 +397,26 @@
 				axios.get('/api/vat')
 					.then(({data})=>(this.vat=data))
 					.catch()
+			},
+			order(){
+				let total = (this.subtotal*this.vat.vat/100) + this.subtotal
+				var data = {
+					customer_id:this.customer_id,
+					quantity:this.qty,
+					subtotal:this.subtotal,
+					vat:this.vat.vat,
+					total:total,
+					pay:this.pay,
+					due:total-this.pay,
+					payby:this.payby
+				} 
+
+				axios.post('/api/order-done',data)
+					.then(()=>{
+						Notification.success()
+						this.$router.push({name:'dashboard'})
+					})
+					.catch(error=>this.errors = error.response.data.errors)
 			}
 			
 		},
