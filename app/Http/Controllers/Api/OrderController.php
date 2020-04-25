@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use App\Model\Order;
+use App\Model\Orderdetail;
 
 class OrderController extends Controller
 {
@@ -48,5 +50,28 @@ class OrderController extends Controller
 
     	DB::table('carts')->delete();
 
+    }
+
+    public function todayOrder(){
+        $date = date('d/m/Y');
+        return response()->json(Order::where('order_date',$date)->with('customer')->orderBy('id','DESC')->get());
+    }
+
+    public function monthlyOrder(){
+        $month = date('F');
+        return response()->json(Order::where('order_month',$month)->with('customer')->orderBy('id','DESC')->get());
+    }
+
+    public function yearlyOrder(){
+        $year = date('Y');
+        return response()->json(Order::where('order_year',$year)->with('customer')->orderBy('id','DESC')->get());
+    }
+
+    public function viewOrder($id){
+        return response()->json(Order::where('id',$id)->with('customer')->first());
+    }
+
+    public function viewOrderDetails($id){
+        return response()->json(Orderdetail::where('order_id',$id)->with('product')->get());
     }
 }

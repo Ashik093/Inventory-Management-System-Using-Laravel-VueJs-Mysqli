@@ -45,6 +45,11 @@ Route::Get('/vat','Api\SettingController@index');
 
 //order
 Route::Post('/order-done','Api\OrderController@orderDone');
+Route::Get('/today-orders','Api\OrderController@todayOrder');
+Route::Get('/monthly-orders','Api\OrderController@monthlyOrder');
+Route::Get('/yearly-orders','Api\OrderController@yearlyOrder');
+Route::Get('/view-order/{id}','Api\OrderController@viewOrder');
+Route::Get('/view-order-deatils/{id}','Api\OrderController@viewOrderDetails');
 
 
 

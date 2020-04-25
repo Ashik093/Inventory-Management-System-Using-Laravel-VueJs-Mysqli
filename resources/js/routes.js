@@ -51,6 +51,12 @@ let editcustomer = require('./components/customer/edit.vue').default;
 
 //point of sale
 let pointofsale = require('./components/pos/pos.vue').default;
+//order
+let todayorder = require('./components/order/index.vue').default;
+let monthlyorder = require('./components/order/month.vue').default;
+let yearlyorder = require('./components/order/year.vue').default;
+let orderdetails = require('./components/order/details.vue').default;
+
 
 export const routes =[
 	//auth
@@ -105,5 +111,10 @@ export const routes =[
 
 	//pos
 	{path:'/point-of-sale',component:pointofsale,name:'pointofsale'},
+	//order
+	{path:'/today-order',component:todayorder,name:'todayorder'},
+	{path:'/monthly-order',component:monthlyorder,name:'monthlyorder'},
+	{path:'/yearly-order',component:yearlyorder,name:'yearlyorder'},
+	{path:'/order-details/:id',component:orderdetails,name:'orderdetails'},
 
 ]
