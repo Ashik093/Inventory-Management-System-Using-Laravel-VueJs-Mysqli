@@ -214,7 +214,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                       <li class="nav-item">
-                        <router-link to="/today-order" class="nav-link">
+                        <router-link to="/search-order" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Search</p>
                         </router-link>

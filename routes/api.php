@@ -50,6 +50,8 @@ Route::Get('/monthly-orders','Api\OrderController@monthlyOrder');
 Route::Get('/yearly-orders','Api\OrderController@yearlyOrder');
 Route::Get('/view-order/{id}','Api\OrderController@viewOrder');
 Route::Get('/view-order-deatils/{id}','Api\OrderController@viewOrderDetails');
+Route::Post('/search-orders-by-date','Api\OrderController@searchOrderByDate');
+Route::Post('/search-orders-by-month','Api\OrderController@searchOrderByMonth');
 
 
 

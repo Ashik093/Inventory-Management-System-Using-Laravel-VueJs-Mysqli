@@ -56,6 +56,7 @@ let todayorder = require('./components/order/index.vue').default;
 let monthlyorder = require('./components/order/month.vue').default;
 let yearlyorder = require('./components/order/year.vue').default;
 let orderdetails = require('./components/order/details.vue').default;
+let searchorder = require('./components/order/search.vue').default;
 
 
 export const routes =[
@@ -116,5 +117,6 @@ export const routes =[
 	{path:'/monthly-order',component:monthlyorder,name:'monthlyorder'},
 	{path:'/yearly-order',component:yearlyorder,name:'yearlyorder'},
 	{path:'/order-details/:id',component:orderdetails,name:'orderdetails'},
+	{path:'/search-order',component:searchorder,name:'searchorder'},
 
 ]

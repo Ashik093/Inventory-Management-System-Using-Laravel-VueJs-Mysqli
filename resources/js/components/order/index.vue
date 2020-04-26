@@ -38,7 +38,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr v-for="order in orders" :key="order.id">
+								<tr v-for="order in filterSearch" :key="order.id">
 									<td>{{ order.customer.name }}</td>
 									<td>{{ order.total }}</td>
 									<td>{{ order.pay }}</td>

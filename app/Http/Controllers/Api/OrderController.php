@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\Model\Order;
 use App\Model\Orderdetail;
+use DateTime;
 
 class OrderController extends Controller
 {
@@ -73,5 +74,17 @@ class OrderController extends Controller
 
     public function viewOrderDetails($id){
         return response()->json(Orderdetail::where('order_id',$id)->with('product')->get());
+    }
+
+    public function searchOrderByDate(Request $request){
+        $date = $request->date;
+        $newDate = new DateTime($date);
+        $result = $newDate->format('d/m/Y');
+        return response()->json(Order::where('order_date',$result)->with('customer')->orderBy('id','DESC')->get());
+    }
+
+    public function searchOrderByMonth(Request $request){
+        $month = $request->month;
+        return response()->json(Order::where('order_month',$month)->with('customer')->orderBy('id','DESC')->get());
     }
 }
