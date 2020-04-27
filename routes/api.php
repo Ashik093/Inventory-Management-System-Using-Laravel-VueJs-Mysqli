@@ -53,6 +53,14 @@ Route::Get('/view-order-deatils/{id}','Api\OrderController@viewOrderDetails');
 Route::Post('/search-orders-by-date','Api\OrderController@searchOrderByDate');
 Route::Post('/search-orders-by-month','Api\OrderController@searchOrderByMonth');
 
+//dashboard
+Route::Get('/today-sell','Api\DashboardController@todaySell');
+Route::Get('/today-income','Api\DashboardController@todayIncome');
+Route::Get('/today-due','Api\DashboardController@todayDue');
+Route::Get('/today-expense','Api\DashboardController@todayExpense');
+Route::Get('/stock-out','Api\DashboardController@stockOut');
+
+
 
 
 
